@@ -11,16 +11,19 @@ export class BoardsService {
     private boardRepository: BoardRepository,
   ) {}
 
+  async getBoards() {
+    return this.boardRepository.getBoards();
+  }
+
+  async deleteBoard(id: number): Promise<void> {
+    return this.boardRepository.deleteBoard(id);
+  }
+
   async createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
-    return this.createBoard(createBoardDto);
+    return this.boardRepository.createBoard(createBoardDto);
   }
 
   async getBoardById(id: number): Promise<Board> {
-    const found = await this.boardRepository.findOne({ where: { id } });
-    if (!found) {
-      throw new NotFoundException(`Cannot find board with id ${id}`);
-    }
-
-    return found;
+    return this.boardRepository.getBoardById(id);
   }
 }

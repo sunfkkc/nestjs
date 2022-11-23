@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   UsePipes,
   ValidationPipe,
@@ -14,6 +16,16 @@ import { CreateBoardDto } from './dto/create-board.dto';
 @Controller('boards')
 export class BoardsController {
   constructor(private boardsService: BoardsService) {}
+
+  @Get()
+  getBoards(): Promise<Board[]> {
+    return this.boardsService.getBoards();
+  }
+
+  @Delete('/:id')
+  deleteBoard(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.boardsService.deleteBoard(id);
+  }
 
   @Post()
   @UsePipes(ValidationPipe)
