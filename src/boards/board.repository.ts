@@ -1,12 +1,14 @@
-import { NotFoundException } from '@nestjs/common';
-import { CustomRepository } from 'src/typeorm-ex.decorator';
-import { Repository } from 'typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { DataSource, Repository } from 'typeorm';
 import { Board } from './board.entity';
 import { BoardStatus } from './board.status.enum';
 import { CreateBoardDto } from './dto/create-board.dto';
 
-@CustomRepository(Board)
+@Injectable()
 export class BoardRepository extends Repository<Board> {
+  constructor(private dataSource: DataSource) {
+    super(Board, dataSource.createEntityManager());
+  }
   async patchBoardStatus(id: number, status: BoardStatus): Promise<Board> {
     const board = await this.getBoardById(id);
     board.status = status;
