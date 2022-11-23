@@ -7,6 +7,13 @@ import { CreateBoardDto } from './dto/create-board.dto';
 
 @CustomRepository(Board)
 export class BoardRepository extends Repository<Board> {
+  async patchBoardStatus(id: number, status: BoardStatus): Promise<Board> {
+    const board = await this.getBoardById(id);
+    board.status = status;
+    await this.save(board);
+    return board;
+  }
+
   async getBoardById(id: number): Promise<Board> {
     const found = await this.findOne({ where: { id } });
     if (!found) {
